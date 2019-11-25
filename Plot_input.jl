@@ -17,4 +17,11 @@ using Plots
 plot(Input.DateTime[100:end],Input.Ts_1[100:end])
 
 # Coordinate
-scatter([0,0,0,1,1,1],[0,1,2,2,1,0],markersize=[5,5,5,5,5,5],markercolor=[Input.SWC_1[229],Input.SWC_2[229],Input.SWC_3[229],Input.SWC_4[229],Input.SWC_5[229],Input.SWC_6[229]])
+# example
+X1 = rand(6)
+Y1 = rand(6)
+Z1 = rand(6)
+scatter(X1,Y1,zcolor = Z1, color = :deep)
+
+
+scatter([0,0,0,1,1,1],[0,1,2,2,1,0], color = :deep,markersize=20,zcolor=[Input.SWC_1[229],Input.SWC_2[229],Input.SWC_3[229],Input.SWC_4[229],Input.SWC_5[229],Input.SWC_6[229]])
