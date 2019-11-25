@@ -62,9 +62,8 @@ title!("11/25/2019 08:00 am")
 plot!(xticks = 0:12.5:87.5)
 plot!(yticks = 0:12.5:87.5)
 plot!(legend = nothing)
-using LaTeXStrings
+# using LaTeXStrings
 plot!(colorbar_title = "Soil Moisture")
 plot!(dpi = 300)
 
-
-savefig("Output2.png")
+savefig("Output\\Output.png")
