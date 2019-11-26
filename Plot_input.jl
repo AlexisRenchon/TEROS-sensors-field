@@ -23,18 +23,17 @@ x = [0,0,0,12.5,12.5,12.5,25,25,25,37.5,37.5,37.5,50,50,50,62.5,62.5,62.5,75,75,
 y = [0,12.5,25,25,12.5,0,0,12.5,25,25,12.5,0,0,12.5,25,25,12.5,0,0,12.5,25,25,12.5,0,37.5,50,50,37.5,50,37.5,37.5,50,50,37.5,37.5,50,50,37.5,50,37.5,62.5,75,87.5,87.5,75,62.5,62.5,75,87.5,87.5,75,62.5,62.5,75,87.5,87.5,75,62.5,62.5,75,87.5,87.5,75,62.5];
 using Dates
 D = Dates.DateTime("20191125 080000", "yyyymmdd HHMMSS")
-t = findall(x -> x == D,data[1].DateTime)
-z = Array{Float64}(undef, 64) # initialize z
-j = 0
+z = Array{Union{Float64,Missing}}(missing, 66) # initialize z, which will contain both Float64 and missing type. 2 missing (logger 6 has 4 port only), so 64+2 = 66
+nextit = collect(0:5:5*n-1)
 for i = 1:n
+    j = nextit[i]
     t = findall(x -> x == D,data[i].DateTime)
-    z[i+j*6] = data[i].SWC_1[t][1]
-    z[i+j*6] = data[i].SWC_2[t][1]
-    z[i+j*6] = data[i].SWC_3[t][1]
-    z[i+j*6] = data[i].SWC_4[t][1]
-    z[i+j*6] = data[i].SWC_5[t][1]
-    z[i+j*6] = data[i].SWC_6[t][1]
-    j = j + 1
+    z[i+j] = data[i].SWC_1[t][1]
+    z[i+1+j] = data[i].SWC_2[t][1]
+    z[i+2+j] = data[i].SWC_3[t][1]
+    z[i+3+j] = data[i].SWC_4[t][1]
+    z[i+4+j] = data[i].SWC_5[t][1]
+    z[i+5+j] = data[i].SWC_6[t][1]
 end
 
 
