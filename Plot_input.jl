@@ -16,11 +16,9 @@ for i = 1:n
     push!(data, df) # push "Insert one or more items at the end of collection"
 end
 
-# Plots space coordinate and SWC by color
-using Plots
 # coordinates of TEROS11 sensors, from sensor 1 to sensor 64
-x = [0,0,0,12.5,12.5,12.5,25,25,25,37.5,37.5,37.5,50,50,50,62.5,62.5,62.5,75,75,75,87.5,87.5,87.5,0,0,12.5,12.5,25,25,37.5,37.5,50,50,62.5,62.5,75,75,87.5,87.5,0,0,0,12.5,12.5,12.5,25,25,25,37.5,37.5,37.5,50,50,50,62.5,62.5,62.5,75,75,75,87.5,87.5,87.5];
-y = [0,12.5,25,25,12.5,0,0,12.5,25,25,12.5,0,0,12.5,25,25,12.5,0,0,12.5,25,25,12.5,0,37.5,50,50,37.5,50,37.5,37.5,50,50,37.5,37.5,50,50,37.5,50,37.5,62.5,75,87.5,87.5,75,62.5,62.5,75,87.5,87.5,75,62.5,62.5,75,87.5,87.5,75,62.5,62.5,75,87.5,87.5,75,62.5];
+x = [0,0,0,12.5,12.5,12.5,25,25,25,37.5,37.5,37.5,50,50,50,62.5,62.5,62.5,75,75,75,87.5,87.5,87.5,0,0,12.5,12.5,25,25,37.5,37.5,50,50,62.5,62.5,75,75,87.5,87.5,0,0,0,12.5,12.5,12.5,missing,missing,25,25,25,37.5,37.5,37.5,50,50,50,62.5,62.5,62.5,75,75,75,87.5,87.5,87.5];
+y = [0,12.5,25,25,12.5,0,0,12.5,25,25,12.5,0,0,12.5,25,25,12.5,0,0,12.5,25,25,12.5,0,37.5,50,50,37.5,50,37.5,37.5,50,50,37.5,37.5,50,50,37.5,50,37.5,62.5,75,87.5,87.5,75,62.5,missing,missing,62.5,75,87.5,87.5,75,62.5,62.5,75,87.5,87.5,75,62.5,62.5,75,87.5,87.5,75,62.5];
 using Dates
 D = Dates.DateTime("20191125 080000", "yyyymmdd HHMMSS")
 z = Array{Union{Float64,Missing}}(missing, 66) # initialize z, which will contain both Float64 and missing type. 2 missing (logger 6 has 4 port only), so 64+2 = 66
@@ -36,7 +34,16 @@ for i = 1:n
     z[i+5+j] = data[i].SWC_6[t][1]
 end
 
+# Replace missing by NaN, for plotting
+x = replace(x, missing=>NaN)
+y = replace(y, missing=>NaN)
+z = replace(z, missing=>NaN)
+# Replace value 54 which was 0 because of sensor error
+z[54] = 0.4
 
+# Plots space coordinate and SWC by color
+using Plots
+scatter(x,y,color=:deep,markersize=10,zcolor=z) # not happy because of the missing values
 
 scatter([0,0,0,12.5,12.5,12.5],[0,12.5,25,25,12.5,0], color = :deep,markersize=10,zcolor=[Input1.SWC_1[229],Input1.SWC_2[229],Input1.SWC_3[229],Input1.SWC_4[229],Input1.SWC_5[229],Input1.SWC_6[229]])
 # dummy 2
