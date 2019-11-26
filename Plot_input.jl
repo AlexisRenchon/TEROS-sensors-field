@@ -18,6 +18,26 @@ end
 
 # Plots space coordinate and SWC by color
 using Plots
+# coordinates of TEROS11 sensors, from sensor 1 to sensor 64
+x = [0,0,0,12.5,12.5,12.5,25,25,25,37.5,37.5,37.5,50,50,50,62.5,62.5,62.5,75,75,75,87.5,87.5,87.5,0,0,12.5,12.5,25,25,37.5,37.5,50,50,62.5,62.5,75,75,87.5,87.5,0,0,0,12.5,12.5,12.5,25,25,25,37.5,37.5,37.5,50,50,50,62.5,62.5,62.5,75,75,75,87.5,87.5,87.5];
+y = [0,12.5,25,25,12.5,0,0,12.5,25,25,12.5,0,0,12.5,25,25,12.5,0,0,12.5,25,25,12.5,0,37.5,50,50,37.5,50,37.5,37.5,50,50,37.5,37.5,50,50,37.5,50,37.5,62.5,75,87.5,87.5,75,62.5,62.5,75,87.5,87.5,75,62.5,62.5,75,87.5,87.5,75,62.5,62.5,75,87.5,87.5,75,62.5];
+using Dates
+D = Dates.DateTime("20191125 080000", "yyyymmdd HHMMSS")
+t = findall(x -> x == D,data[1].DateTime)
+z = Array{Float64}(undef, 64) # initialize z
+j = 0
+for i = 1:n
+    t = findall(x -> x == D,data[i].DateTime)
+    z[i+j*6] = data[i].SWC_1[t][1]
+    z[i+j*6] = data[i].SWC_2[t][1]
+    z[i+j*6] = data[i].SWC_3[t][1]
+    z[i+j*6] = data[i].SWC_4[t][1]
+    z[i+j*6] = data[i].SWC_5[t][1]
+    z[i+j*6] = data[i].SWC_6[t][1]
+    j = j + 1
+end
+
+
 
 scatter([0,0,0,12.5,12.5,12.5],[0,12.5,25,25,12.5,0], color = :deep,markersize=10,zcolor=[Input1.SWC_1[229],Input1.SWC_2[229],Input1.SWC_3[229],Input1.SWC_4[229],Input1.SWC_5[229],Input1.SWC_6[229]])
 # dummy 2
