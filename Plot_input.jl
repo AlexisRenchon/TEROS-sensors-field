@@ -85,6 +85,7 @@ scatter!([50,50,50,62.5,62.5,62.5],[62.5,75,87.5,87.5,75,62.5], color = :deep,ma
 scatter!([75,75,75,87.5,87.5,87.5],[62.5,75,87.5,87.5,75,62.5], color = :deep,markersize=10,zcolor=[Input11.SWC_1[231-100],Input11.SWC_2[231-100],Input11.SWC_3[231-100],Input11.SWC_4[231-100],Input11.SWC_5[231-100],Input11.SWC_6[231-100]])
 xlabel!("x (m)")
 ylabel!("y (m)")
+using Dates
 title!(Dates.format(Input1.DateTime[129], "e, dd u yyyy HH:MM:SS"))
 plot!(xticks = 0:12.5:87.5)
 plot!(yticks = 0:12.5:87.5)
