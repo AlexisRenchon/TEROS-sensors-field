@@ -34,6 +34,14 @@ for j = 1:11
         end
     end
 end
+MD = CSV.read("Input\\Metadata.csv")
+x = MD.x*12.5
+y = MD.y*12.5
+# Replace missing by NaN, for plotting
+x = replace(x, missing=>NaN)
+y = replace(y, missing=>NaN)
+SWC = replace(SWC, missing=>NaN)
+SWC = replace(SWC, 0.0=>NaN)
 # could find something more elegent to do the loop below...
 for j = 1:66
     for i = 1:m
@@ -43,15 +51,7 @@ for j = 1:66
     end
 end
 
-MD = CSV.read("Input\\Metadata.csv")
-x = MD.x*12.5
-y = MD.y*12.5
 # altitude = rand(228:236,66)
-# Replace missing by NaN, for plotting
-x = replace(x, missing=>NaN)
-y = replace(y, missing=>NaN)
-SWC = replace(SWC, missing=>NaN)
-SWC = replace(SWC, 0.0=>NaN)
 # Initialize plot for gif
 using Plots
 scatter(x,y,color=:redsblues,markersize=10,zcolor=SWC[175,:])
