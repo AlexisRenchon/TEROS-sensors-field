@@ -13,6 +13,7 @@ for i = 1:n
 end
 x = [0,0,0,12.5,12.5,12.5,25,25,25,37.5,37.5,37.5,50,50,50,62.5,62.5,62.5,75,75,75,87.5,87.5,87.5,0,0,12.5,12.5,25,25,37.5,37.5,50,50,62.5,62.5,75,75,87.5,87.5,0,0,0,12.5,12.5,12.5,missing,missing,25,25,25,37.5,37.5,37.5,50,50,50,62.5,62.5,62.5,75,75,75,87.5,87.5,87.5];
 y = [0,12.5,25,25,12.5,0,0,12.5,25,25,12.5,0,0,12.5,25,25,12.5,0,0,12.5,25,25,12.5,0,37.5,50,50,37.5,50,37.5,37.5,50,50,37.5,37.5,50,50,37.5,50,37.5,62.5,75,87.5,87.5,75,62.5,missing,missing,62.5,75,87.5,87.5,75,62.5,62.5,75,87.5,87.5,75,62.5,62.5,75,87.5,87.5,75,62.5];
+altitude = rand(228:236,66)
 using Dates
 # Differs from here, calculate z for different dates
 # Initialize array of Dates
@@ -68,3 +69,8 @@ anim = @animate for i = 1:6
     scatter!(x,y,color=:deep,markersize=10,zcolor=z[:,i])
 end
 gif(anim,"Output\\anim_fps2.gif",fps=2)
+
+# 3D scatter with altitude
+# scatter3d(x,y,altitude,color=:deep,markersize=10,zcolor=z[:,1])
+# this connect the dots to create a surface
+# surface(x,y,altitude)
