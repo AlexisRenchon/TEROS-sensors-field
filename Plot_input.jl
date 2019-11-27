@@ -1,7 +1,8 @@
 # Plot soil moisture (color) on coordinate (x,y), Alexis 11/25/2019
 
 # This will get all input File Name
-Input_FN = readdir("Input\\")
+Input_FN = readdir("Input\\TEROS\\")
+permute!(Input_FN,[1,4,5,6,7,8,9,10,11,2,3]) # need to reorder from 1 to 11
 n = length(Input_FN) # this is the number of input files, useful later
 
 # Initialize array of dataframes
@@ -12,7 +13,7 @@ data = DataFrame[]
 using CSV
 col_name = [:DateTime,:SWC_1,:Ts_1,:SWC_2,:Ts_2,:SWC_3,:Ts_3,:SWC_4,:Ts_4,:SWC_5,:Ts_5,:SWC_6,:Ts_6,:Battery_P,:Battery_V,:Pressure,:Log_T]
 for i = 1:n
-    df = CSV.read(string("Input\\",Input_FN[i]),header=col_name,datarow=2,dateformat="yyyy-mm-dd HH:MM:SS")
+    df = CSV.read(string("Input\\TEROS\\",Input_FN[i]),header=col_name,datarow=2,dateformat="yyyy-mm-dd HH:MM:SS")
     push!(data, df) # push "Insert one or more items at the end of collection"
 end
 MD = CSV.read("Input\\Metadata.csv")
@@ -21,7 +22,7 @@ MD = CSV.read("Input\\Metadata.csv")
 x = MD.x*12.5
 y = MD.y*12.5
 using Dates
-D = DateTime(2019,11,25,08,00,00)
+D = DateTime(2019,11,27,10,00,00)
 z = Array{Union{Float64,Missing}}(missing, 66) # initialize z, which will contain both Float64 and missing type. 2 missing (logger 6 has 4 port only), so 64+2 = 66
 nextit = collect(0:5:5*n-1)
 for i = 1:n
@@ -39,8 +40,7 @@ end
 x = replace(x, missing=>NaN)
 y = replace(y, missing=>NaN)
 z = replace(z, missing=>NaN)
-# Replace value 54 which was 0 because of sensor error
-z[54] = 0.4
+y = replace(z, 0.0=>NaN)
 
 # Plots space coordinate and SWC by color
 using Plots
