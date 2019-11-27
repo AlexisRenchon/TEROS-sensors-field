@@ -62,8 +62,9 @@ plot!(yticks = 0:12.5:87.5)
 plot!(legend = nothing)
 plot!(colorbar_title = "Soil Moisture")
 plot!(dpi = 300)
-# Make gif
-@gif for i=1:6
+# Make gif, fps = 2
+anim = @animate for i = 1:6
     title!(Dates.format(D1[i], "e, dd u yyyy HH:MM:SS"))
     scatter!(x,y,color=:deep,markersize=10,zcolor=z[:,i])
 end
+gif(anim,"Output\\anim_fps2.gif",fps=2)
