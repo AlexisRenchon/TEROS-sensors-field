@@ -25,3 +25,20 @@ for d = [23,24,25]
         global i += 1 # i = i + 1
     end
 end
+# Create 6 vector z
+z = Array{Union{Float64,Missing}}(missing, 66, 6)
+# z2 = Array{Array}(undef, 6)
+# z2[1] = [1,2,3]
+j = 0
+for dt = 1:6
+    for i = 1:n
+        t = findall(x -> x == D1[dt],data[i].DateTime)
+        z[i+j,dt] = data[i].SWC_1[t][1]
+        z[i+1+j,dt] = data[i].SWC_2[t][1]
+        z[i+2+j,dt] = data[i].SWC_3[t][1]
+        z[i+3+j,dt] = data[i].SWC_4[t][1]
+        z[i+4+j,dt] = data[i].SWC_5[t][1]
+        z[i+5+j,dt] = data[i].SWC_6[t][1]
+        global j += 5 # j = j + 5
+    end
+end
