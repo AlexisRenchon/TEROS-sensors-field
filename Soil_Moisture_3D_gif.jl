@@ -54,7 +54,7 @@ SWC = replace(SWC, missing=>NaN)
 SWC = replace(SWC, 0.0=>NaN)
 # Initialize plot for gif
 using Plots
-scatter(x,y,color=:deep,markersize=10,zcolor=SWC[175,:])
+scatter(x,y,color=:redsblues,markersize=10,zcolor=SWC[175,:])
 xlabel!("x (m)")
 ylabel!("y (m)")
 title!(Dates.format(Dtime[175], "e, dd u yyyy HH:MM:SS"))
@@ -66,7 +66,7 @@ plot!(dpi = 300)
 # Make gif, fps = 2
 anim = @animate for i = 175:m
     title!(Dates.format(Dtime[i], "e, dd u yyyy HH:MM:SS"))
-    scatter!(x,y,color=:deep,markersize=10,zcolor=SWC[i,:])
+    scatter!(x,y,color=:redsblues,markersize=10,zcolor=SWC[i,:])
 end
 gif(anim,"Output\\anim_5days.gif",fps=10)
 
