@@ -15,10 +15,11 @@ for i = 1:n
     df = CSV.read(string("Input\\",Input_FN[i]),header=col_name,datarow=2,dateformat="yyyy-mm-dd HH:MM:SS")
     push!(data, df) # push "Insert one or more items at the end of collection"
 end
+MD = CSV.read("Input\\Metadata.csv")
 
 # coordinates of TEROS11 sensors, from sensor 1 to sensor 64
-x = [0,0,0,12.5,12.5,12.5,25,25,25,37.5,37.5,37.5,50,50,50,62.5,62.5,62.5,75,75,75,87.5,87.5,87.5,0,0,12.5,12.5,25,25,37.5,37.5,50,50,62.5,62.5,75,75,87.5,87.5,0,0,0,12.5,12.5,12.5,missing,missing,25,25,25,37.5,37.5,37.5,50,50,50,62.5,62.5,62.5,75,75,75,87.5,87.5,87.5];
-y = [0,12.5,25,25,12.5,0,0,12.5,25,25,12.5,0,0,12.5,25,25,12.5,0,0,12.5,25,25,12.5,0,37.5,50,50,37.5,50,37.5,37.5,50,50,37.5,37.5,50,50,37.5,50,37.5,62.5,75,87.5,87.5,75,62.5,missing,missing,62.5,75,87.5,87.5,75,62.5,62.5,75,87.5,87.5,75,62.5,62.5,75,87.5,87.5,75,62.5];
+x = MD.x*12.5
+y = MD.y*12.5
 using Dates
 D = DateTime(2019,11,25,08,00,00)
 z = Array{Union{Float64,Missing}}(missing, 66) # initialize z, which will contain both Float64 and missing type. 2 missing (logger 6 has 4 port only), so 64+2 = 66
