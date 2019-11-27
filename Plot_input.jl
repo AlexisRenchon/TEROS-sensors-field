@@ -40,14 +40,14 @@ end
 x = replace(x, missing=>NaN)
 y = replace(y, missing=>NaN)
 z = replace(z, missing=>NaN)
-y = replace(z, 0.0=>NaN)
+z = replace(z, 0.0=>NaN)
 
 # Plots space coordinate and SWC by color
 using Plots
 scatter(x,y,color=:deep,markersize=10,zcolor=z)
 xlabel!("x (m)")
 ylabel!("y (m)")
-title!("11/25/2019 08:00 am")
+title!(Dates.format(D, "e, dd u yyyy HH:MM:SS"))
 plot!(xticks = 0:12.5:87.5)
 plot!(yticks = 0:12.5:87.5)
 plot!(legend = nothing)

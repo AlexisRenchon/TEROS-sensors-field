@@ -1,20 +1,21 @@
 # Create a 3D gif of SWC moisture in space, over time
 
 # First part of this code is similar to Plot_input.jl
-Input_FN = readdir("Input\\")
+Input_FN = readdir("Input\\TEROS\\")
+permute!(Input_FN,[1,4,5,6,7,8,9,10,11,2,3]) # need to reorder from 1 to 11
 n = length(Input_FN) # this is the number of input files, useful later
 using DataFrames
 data = DataFrame[]
 using CSV
 col_name = [:DateTime,:SWC_1,:Ts_1,:SWC_2,:Ts_2,:SWC_3,:Ts_3,:SWC_4,:Ts_4,:SWC_5,:Ts_5,:SWC_6,:Ts_6,:Battery_P,:Battery_V,:Pressure,:Log_T]
 for i = 1:n
-    df = CSV.read(string("Input\\",Input_FN[i]),header=col_name,datarow=2,dateformat="yyyy-mm-dd HH:MM:SS")
+    df = CSV.read(string("Input\\TEROS\\",Input_FN[i]),header=col_name,datarow=2,dateformat="yyyy-mm-dd HH:MM:SS")
     push!(data, df) # push "Insert one or more items at the end of collection"
 end
 MD = CSV.read("Input\\Metadata.csv")
 x = MD.x*12.5
 y = MD.y*12.5
-altitude = rand(228:236,66)
+# altitude = rand(228:236,66)
 using Dates
 # Differs from here, calculate z for different dates
 # Initialize array of Dates
@@ -49,10 +50,7 @@ end
 x = replace(x, missing=>NaN)
 y = replace(y, missing=>NaN)
 z = replace(z, missing=>NaN)
-# Replace value 54 which was 0 because of sensor error
-for i = 1:6
-    z[54,i] = 0.4
-end
+z = replace(z, 0.0=>NaN)
 # Initialize plot for gif
 using Plots
 scatter(x,y,color=:deep,markersize=10,zcolor=z[:,1])
