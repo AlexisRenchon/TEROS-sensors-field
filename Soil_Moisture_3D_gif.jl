@@ -42,3 +42,28 @@ for dt = 1:6
         z[i+5+j,dt] = data[i].SWC_6[t][1]
     end
 end
+
+# Replace missing by NaN, for plotting
+x = replace(x, missing=>NaN)
+y = replace(y, missing=>NaN)
+z = replace(z, missing=>NaN)
+# Replace value 54 which was 0 because of sensor error
+for i = 1:6
+    z[54,i] = 0.4
+end
+# Initialize plot for gif
+using Plots
+scatter(x,y,color=:deep,markersize=10,zcolor=z[:,1])
+xlabel!("x (m)")
+ylabel!("y (m)")
+title!(Dates.format(D1[1], "e, dd u yyyy HH:MM:SS"))
+plot!(xticks = 0:12.5:87.5)
+plot!(yticks = 0:12.5:87.5)
+plot!(legend = nothing)
+plot!(colorbar_title = "Soil Moisture")
+plot!(dpi = 300)
+# Make gif
+@gif for i=1:6
+    title!(Dates.format(D1[i], "e, dd u yyyy HH:MM:SS"))
+    scatter!(x,y,color=:deep,markersize=10,zcolor=z[:,i])
+end
