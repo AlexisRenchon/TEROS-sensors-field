@@ -54,7 +54,9 @@ end
 # altitude = rand(228:236,66)
 # Initialize plot for gif
 using Plots
-scatter(x,y,color=:redsblues,markersize=10,zcolor=SWC[175,:])
+z = SWC[175,:]
+use = findall(!isnan,z) # all non NaN values in z
+p = scatter(x[use],y[use],color=:redsblues,markersize=10,zcolor=z[use])
 xlabel!("x (m)")
 ylabel!("y (m)")
 title!(Dates.format(Dtime[175], "e, dd u yyyy HH:MM:SS"))
@@ -66,7 +68,9 @@ plot!(dpi = 300)
 # Make gif, fps = 2
 anim = @animate for i = 175:m
     title!(Dates.format(Dtime[i], "e, dd u yyyy HH:MM:SS"))
-    scatter!(x,y,color=:redsblues,markersize=10,zcolor=SWC[i,:])
+    z = zcolor=SWC[i,:]
+    use = findall(!isnan,z) # all non NaN values in z
+    scatter!(x[use],y[use],color=:redsblues,markersize=10,zcolor=z[use])
 end
 gif(anim,"Output\\anim_5days.gif",fps=10)
 
