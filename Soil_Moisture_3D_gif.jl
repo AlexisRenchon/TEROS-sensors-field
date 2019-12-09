@@ -1,12 +1,13 @@
 # Create a 3D gif of SWC moisture in space, over time
 
+# Used Packages
+using DataFrames; using CSV; using Dates; using Plots;
+
 # First part of this code is similar to Plot_input.jl
 Input_FN = readdir("Input\\TEROS\\")
 permute!(Input_FN,[1,4,5,6,7,8,9,10,11,2,3]) # need to reorder from 1 to 11
 n = length(Input_FN) # this is the number of input files, useful later
-using DataFrames
 data = DataFrame[]
-using CSV
 col_name = [:DateTime,:SWC_1,:Ts_1,:SWC_2,:Ts_2,:SWC_3,:Ts_3,:SWC_4,:Ts_4,:SWC_5,:Ts_5,:SWC_6,:Ts_6,:Battery_P,:Battery_V,:Pressure,:Log_T]
 for i = 1:n
     df = CSV.read(string("Input\\TEROS\\",Input_FN[i]),header=col_name,datarow=2,dateformat="yyyy-mm-dd HH:MM:SS")
@@ -14,7 +15,6 @@ for i = 1:n
 end
 
 # Create a continuous half-hourly DateTime vector
-using Dates
 Dtime = collect(Dates.DateTime(DateTime(2019,11,19,00,00,00)):Dates.Minute(30):Dates.DateTime(DateTime(2019,11,28,00,00,00)))
 m = length(Dtime)
 # Initialize SWC matrice with 66 columns, m rows
@@ -53,26 +53,25 @@ end
 
 # altitude = rand(228:236,66)
 # Initialize plot for gif
-using Plots
 z = SWC[175,:]
 use = findall(!isnan,z) # all non NaN values in z
-p = scatter(x[use],y[use],color=:redsblues,markersize=10,zcolor=z[use])
-xlabel!("x (m)")
-ylabel!("y (m)")
-title!(Dates.format(Dtime[175], "e, dd u yyyy HH:MM:SS"))
-plot!(xticks = 0:12.5:87.5)
-plot!(yticks = 0:12.5:87.5)
+scatter(x[use],y[use],color=:redsblues,markersize=10,zcolor=z[use],
+xlabel="x (m)",ylabel="y (m)",title=Dates.format(Dtime[175], "e, dd u yyyy HH:MM:SS"),
+xticks = 0:12.5:87.5,yticks = 0:12.5:87.5,colorbar_title = "Soil Moisture",
+clim=(0.35,0.48))
 plot!(legend = nothing)
-plot!(colorbar_title = "Soil Moisture")
-plot!(dpi = 300)
+
 # Make gif, fps = 2
 anim = @animate for i = 175:m
-    title!(Dates.format(Dtime[i], "e, dd u yyyy HH:MM:SS"))
     z = zcolor=SWC[i,:]
     use = findall(!isnan,z) # all non NaN values in z
-    scatter!(x[use],y[use],color=:redsblues,markersize=10,zcolor=z[use])
+    scatter(x[use],y[use],color=:redsblues,markersize=10,zcolor=z[use],
+    xlabel="x (m)",ylabel="y (m)",title=Dates.format(Dtime[i], "e, dd u yyyy HH:MM:SS"),
+    xticks = 0:12.5:87.5,yticks = 0:12.5:87.5,colorbar_title = "Soil Moisture",
+    clim=(0.35,0.48))
+    plot!(legend = nothing)
 end
-gif(anim,"Output\\anim_5days.gif",fps=10)
+gif(anim,"Output\\anim_5days_v2.gif",fps=10)
 
 # 3D scatter with altitude
 # scatter3d(x,y,altitude,color=:deep,markersize=10,zcolor=SWC[:,1])
