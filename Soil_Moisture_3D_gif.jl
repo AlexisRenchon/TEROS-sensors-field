@@ -15,7 +15,7 @@ for i = 1:n
 end
 
 # Create a continuous half-hourly DateTime vector
-Dtime = collect(Dates.DateTime(DateTime(2019,11,19,00,00,00)):Dates.Minute(30):Dates.DateTime(DateTime(2019,11,28,00,00,00)))
+Dtime = collect(Dates.DateTime(DateTime(2019,11,19,00,00,00)):Dates.Minute(30):Dates.DateTime(DateTime(2019,12,08,00,00,00)))
 m = length(Dtime)
 # Initialize SWC matrice with 66 columns, m rows
 SWC = Array{Union{Float64,Missing}}(missing,m,66)
@@ -42,7 +42,7 @@ x = replace(x, missing=>NaN)
 y = replace(y, missing=>NaN)
 SWC = replace(SWC, missing=>NaN)
 SWC = replace(SWC, 0.0=>NaN)
-# could find something more elegent to do the loop below...
+# could find something more elegant to do the loop below...
 for j = 1:66
     for i = 1:m
         if SWC[i,j] < 0.35 || SWC[i,j] > 0.5
@@ -51,9 +51,8 @@ for j = 1:66
     end
 end
 
-# altitude = rand(228:236,66)
 # Initialize plot for gif
-z = SWC[175,:]
+z = SWC[175,:] # Dtime[175] = 2019-11-22T15:00:00
 use = findall(!isnan,z) # all non NaN values in z
 scatter(x[use],y[use],color=:redsblues,markersize=10,zcolor=z[use],
 xlabel="x (m)",ylabel="y (m)",title=Dates.format(Dtime[175], "e, dd u yyyy HH:MM:SS"),
@@ -62,7 +61,7 @@ clim=(0.35,0.48))
 plot!(legend = nothing)
 
 # Make gif, fps = 2
-anim = @animate for i = 175:m
+anim = @animate for i = collect(175:48:m)
     z = zcolor=SWC[i,:]
     use = findall(!isnan,z) # all non NaN values in z
     scatter(x[use],y[use],color=:redsblues,markersize=10,zcolor=z[use],
@@ -71,12 +70,4 @@ anim = @animate for i = 175:m
     clim=(0.35,0.48))
     plot!(legend = nothing)
 end
-gif(anim,"Output\\anim_5days_v2.gif",fps=10)
-
-# 3D scatter with altitude
-# scatter3d(x,y,altitude,color=:deep,markersize=10,zcolor=SWC[:,1])
-# this connect the dots to create a surface
-# surface(x,y,altitude)
-
-# to do, no dot if missing data
-# to do, fix the colorbar range (from 0.35 to 0.5 for example)
+gif(anim,"Output\\anim_5days_v3.gif",fps=2)
